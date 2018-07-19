@@ -41,11 +41,10 @@ public class NettyLatencyTimerChannelHandler extends ChannelDuplexHandler {
         // Setup Timers
         result.setStart(System.currentTimeMillis());
         this.sendStartNanoTime = System.nanoTime();
-        promise.addListener(f -> sendEndNanoTime = System.nanoTime());
 
         final FullHttpRequest request = (FullHttpRequest) msg;
         result.setHttpRequest(request);
-        ctx.writeAndFlush(request);
+        ctx.writeAndFlush(request).addListener(f -> sendEndNanoTime = System.nanoTime());
     }
 
     @Override
